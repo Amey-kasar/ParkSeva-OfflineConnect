@@ -1,0 +1,333 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:host {
+  /* --- THEME VARIABLES --- */
+  --bg-body: #f4f4f5;      
+  --bg-surface: #ffffff;   
+  --text-main: #09090b;    
+  --text-muted: #71717a;   
+  --border: #e4e4e7;
+  --primary-hover: #f4f4f5;
+  
+  --header-height: 60px;
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 80px;
+
+  /* --- APPLE FLUID ANIMATION VARIABLES --- */
+  /* This cubic-bezier creates a subtle 'spring' or 'overshoot' effect */
+  --fluid-ease: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  --fluid-duration: 0.5s;
+  
+  /* Fast, non-bouncy ease for color/opacity changes */
+  --color-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --color-duration: 0.2s;
+
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  display: block;
+}
+
+/* ===== APP SHELL ===== */
+.app-layout {
+  min-height: 100vh;
+  background: var(--bg-body);
+  display: flex;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  
+  /* Hardware acceleration for buttery smooth sliding */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: width, transform;
+  
+  transition: width var(--fluid-duration) var(--fluid-ease), 
+              transform var(--fluid-duration) var(--fluid-ease);
+}
+
+.sidebar.collapsed { width: var(--sidebar-collapsed-width); }
+
+.sidebar-header { 
+  height: var(--header-height); 
+  display: flex; 
+  align-items: center; 
+  padding: 0 24px; 
+  gap: 12px; 
+  margin-top: 12px; 
+}
+
+.brand-box { 
+  width: 50px; 
+  height: 36px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  background: transparent; 
+  cursor: pointer; 
+  transition: transform var(--color-duration) var(--color-ease), 
+              opacity var(--color-duration) var(--color-ease); 
+}
+
+/* Subtle icon press effect */
+.brand-box:hover { transform: scale(0.95); opacity: 0.8; }
+.brand-box:active { transform: scale(0.9); }
+
+.brand-img { width: 100%; height: 100%; object-fit: contain; }
+.brand-name { 
+  margin: 0; 
+  font-size: 1.25rem; 
+  font-weight: 800; 
+  color: var(--text-main); 
+  cursor: pointer; 
+  letter-spacing: -0.02em; 
+}
+
+.sidebar-nav { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  padding: 24px 12px; 
+  gap: 8px; 
+  overflow-y: auto; 
+  
+  /* Mac-like thin scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar { width: 6px; }
+.sidebar-nav::-webkit-scrollbar-thumb { background-color: var(--border); border-radius: 10px; }
+
+.nav-divider { height: 1px; background: var(--border); margin: 16px 12px; }
+
+.sidebar-item { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  padding: 10px 12px; 
+  color: var(--text-muted); 
+  text-decoration: none; 
+  font-size: 0.9rem; 
+  font-weight: 600; 
+  border-radius: 8px; 
+  white-space: nowrap; 
+  overflow: hidden;
+  
+  /* Smooth color blending and scale logic */
+  transition: background var(--color-duration) var(--color-ease),
+              color var(--color-duration) var(--color-ease),
+              transform 0.1s ease-out;
+}
+
+.sidebar-icon { width: 20px; height: 20px; flex-shrink: 0; }
+
+.sidebar-item:hover { 
+  background: var(--primary-hover); 
+  color: var(--text-main); 
+}
+
+/* iOS tactile 'press' effect */
+.sidebar-item:active {
+  transform: scale(0.97);
+}
+
+.sidebar-item.active { 
+  background: var(--text-main); 
+  color: #ffffff; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Slight elevation when active */
+}
+
+.notification-badge { 
+  background: #dc2626; 
+  color: white; 
+  font-size: 0.7rem; 
+  padding: 2px 6px; 
+  border-radius: 12px; 
+  margin-left: auto; 
+}
+
+.sidebar.collapsed .sidebar-item span, 
+.sidebar.collapsed .brand-name, 
+.sidebar.collapsed .profile-info-compact { display: none; }
+.sidebar.collapsed .sidebar-item { justify-content: center; padding: 12px; }
+.sidebar.collapsed .sidebar-header { padding: 0; justify-content: center; }
+.sidebar.collapsed .profile-trigger { padding: 16px 0; justify-content: center; }
+
+.sidebar-footer { padding: 16px 12px; }
+.profile-dropdown { position: relative; width: 100%; }
+
+.profile-trigger { 
+  width: 100%; 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  padding: 8px; 
+  background: transparent; 
+  border: none; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  text-align: left;
+  transition: background var(--color-duration) var(--color-ease),
+              transform 0.1s ease-out;
+}
+
+.profile-trigger:hover { background: var(--primary-hover); }
+.profile-trigger:active { transform: scale(0.98); }
+
+.profile-avatar-img { 
+  width: 36px; 
+  height: 36px; 
+  border-radius: 50%; 
+  background: var(--border); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-weight: bold; 
+  color: var(--text-main); 
+  flex-shrink: 0; 
+}
+
+.profile-info-compact { overflow: hidden; }
+.profile-name { font-weight: 700; font-size: 0.9rem; color: var(--text-main); white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.profile-email { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+/* macOS Context Menu Animation */
+@keyframes macOsMenuPop { 
+  0% { 
+    opacity: 0; 
+    transform: scale(0.92) translateY(8px); 
+    filter: blur(2px);
+  } 
+  100% { 
+    opacity: 1; 
+    transform: scale(1) translateY(0); 
+    filter: blur(0);
+  } 
+}
+
+.profile-dropdown-menu.bottom-up { 
+  position: absolute; 
+  bottom: calc(100% + 12px); 
+  left: 0; 
+  right: 0; 
+  background: rgba(255, 255, 255, 0.85); /* Frost effect prep */
+  backdrop-filter: blur(12px); /* macOS Frosted Glass */
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(228, 228, 231, 0.5); 
+  border-radius: 12px; /* Smoother curve */
+  z-index: 110; 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.05); /* Layered shadows */
+  overflow: hidden; 
+  padding: 6px 0; 
+  transform-origin: bottom center; /* Centered pop looks cleaner */
+  
+  /* Fast, crisp animation */
+  animation: macOsMenuPop 0.2s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; 
+}
+
+.dropdown-item { 
+  width: 100%; 
+  padding: 10px 16px; 
+  text-align: left; 
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  font-size: 0.85rem; 
+  font-weight: 500; 
+  color: var(--text-main); 
+  transition: background var(--color-duration) var(--color-ease); 
+}
+
+.dropdown-item:hover { background: var(--primary-hover); }
+.dropdown-item.logout { color: #dc2626; }
+.dropdown-item.logout:hover { background: #fef2f2; }
+
+/* ===== MAIN CONTENT WRAPPER ===== */
+.main-layout {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  
+  /* Match the sidebar's easing */
+  transition: margin-left var(--fluid-duration) var(--fluid-ease);
+  will-change: margin-left;
+}
+
+.main-layout.sidebar-collapsed {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+.main-content {
+  flex: 1;
+  padding: 24px; 
+}
+
+/* Mobile Toggle */
+.mobile-menu-btn { 
+  display: none; 
+  position: fixed; 
+  top: 16px; 
+  left: 16px; 
+  z-index: 90; 
+  width: 44px; 
+  height: 44px; 
+  background: var(--bg-surface); 
+  border: 1px solid var(--border); 
+  border-radius: 12px; /* iOS squircle */
+  color: var(--text-main); 
+  cursor: pointer; 
+  align-items: center; 
+  justify-content: center; 
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06); 
+  
+  transition: transform 0.1s ease-out, background var(--color-duration) var(--color-ease);
+}
+
+.mobile-menu-btn:active {
+  transform: scale(0.92);
+}
+
+/* Mobile Overlay */
+.mobile-overlay { 
+  position: fixed; 
+  inset: 0; 
+  
+  /* Smoother, darker overlay */
+  background: rgba(0,0,0,0.25); 
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  
+  z-index: 95; 
+  opacity: 0; 
+  visibility: hidden; 
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              visibility 0.3s; 
+}
+
+.mobile-overlay.show { 
+  opacity: 1; 
+  visibility: visible; 
+}
+
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  
+  /* Apply the spring physics to the mobile menu sliding in */
+  .sidebar.show { transform: translateX(0); }
+  
+  .main-layout, .main-layout.sidebar-collapsed { margin-left: 0; }
+  .mobile-menu-btn { display: flex; }
+  .main-content { padding-top: 76px; }
+}

@@ -1,0 +1,119 @@
+<div class="parking-shell">
+  
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Admin Dashboard</h1>
+      <p>Manage staff members and system access.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary" (click)="showCreateForm = !showCreateForm">
+        <i class="fa-solid" [class.fa-plus]="!showCreateForm" [class.fa-minus]="showCreateForm"></i>
+        {{ showCreateForm ? 'Cancel' : 'Add Staff' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Total Staff</div>
+      <div class="stat-value">{{staffList.length}}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Active Now</div>
+      <div class="stat-value text-success">{{activeStaffCount}}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Admin Users</div>
+      <div class="stat-value">1</div>
+    </div>
+  </div>
+
+  <div class="content-panel mb-4" *ngIf="showCreateForm">
+    <div class="panel-header">
+      <h2>Create New Staff Member</h2>
+    </div>
+    
+    <form (ngSubmit)="createStaff()" #staffFormRef="ngForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" [(ngModel)]="staffForm.name" name="name" required placeholder="e.g. John Doe">
+        </div>
+        
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" [(ngModel)]="staffForm.phoneNumber" name="phoneNumber" required placeholder="e.g. +91 98765 43210">
+        </div>
+        
+        <div class="form-group">
+          <label>Email (Optional)</label>
+          <input type="email" [(ngModel)]="staffForm.email" name="email" placeholder="john@example.com">
+        </div>
+        
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" [(ngModel)]="staffForm.password" name="password" required placeholder="••••••••">
+        </div>
+      </div>
+      
+      <div class="form-footer">
+        <button type="button" class="btn btn-outline" (click)="resetForm()">Reset</button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+          <span *ngIf="isSubmitting"><i class="fa-solid fa-spinner fa-spin"></i> Creating...</span>
+          <span *ngIf="!isSubmitting">Create Account</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="content-panel">
+    <div class="panel-header">
+      <h2>Staff Directory</h2>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search staff..." [(ngModel)]="searchTerm">
+      </div>
+    </div>
+    
+    <div *ngIf="isLoading" class="empty-state">
+      <i class="fa-solid fa-circle-notch fa-spin empty-icon"></i>
+      <p>Loading staff members...</p>
+    </div>
+    
+    <div *ngIf="!isLoading && staffList.length === 0" class="empty-state">
+      <i class="fa-solid fa-users empty-icon"></i>
+      <p>No staff members found.</p>
+      <button class="btn btn-primary" (click)="showCreateForm = true">Add Staff Member</button>
+    </div>
+    
+    <div *ngIf="!isLoading && staffList.length > 0" class="staff-grid">
+      <div *ngFor="let staff of filteredStaff" class="staff-card">
+        
+        <div class="card-top">
+          <div class="avatar">
+            {{staff.name.charAt(0).toUpperCase()}}
+          </div>
+          <div class="card-menu">
+            <span class="role-tag">{{staff.role}}</span>
+          </div>
+        </div>
+        
+        <div class="card-info">
+          <h3>{{staff.name}}</h3>
+          <p class="meta-row"><i class="fa-solid fa-phone"></i> {{staff.phoneNumber}}</p>
+          <p class="meta-row" *ngIf="staff.email"><i class="fa-solid fa-envelope"></i> {{staff.email}}</p>
+          <p class="meta-row date"><i class="fa-regular fa-calendar"></i> Joined {{staff.createdAt | date:'MMM yyyy'}}</p>
+        </div>
+        
+        <div class="card-actions">
+          <button class="btn btn-outline full-width" title="Edit">Edit</button>
+          <button class="btn btn-icon-danger" (click)="deleteStaff(staff._id)" title="Delete">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

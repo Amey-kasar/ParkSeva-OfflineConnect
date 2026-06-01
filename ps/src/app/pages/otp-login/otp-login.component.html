@@ -1,0 +1,90 @@
+<div class="otp-login-container">
+  <div class="login-card">
+    <div class="card-header">
+      <h2>Login with OTP</h2>
+      <p>Enter your phone number to receive a verification code</p>
+    </div>
+
+    <div class="card-body">
+      <!-- Phone Number Step -->
+      <div *ngIf="currentStep === 'phone'" class="step-content">
+        <form (ngSubmit)="sendOTP()" #phoneForm="ngForm">
+          <div class="input-group">
+            <label for="phoneNumber">Phone Number</label>
+            <div class="phone-input">
+              <span class="country-code">+91</span>
+              <input 
+                type="tel" 
+                id="phoneNumber"
+                [(ngModel)]="phoneNumber" 
+                name="phoneNumber"
+                placeholder="Enter your phone number"
+                pattern="[0-9]{10}"
+                maxlength="10"
+                required>
+            </div>
+          </div>
+          
+          <button 
+            type="submit" 
+            class="btn-primary" 
+            [disabled]="isLoading || phoneForm.invalid">
+            <span *ngIf="!isLoading">Send OTP</span>
+            <span *ngIf="isLoading">Sending...</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- OTP Verification Step -->
+      <div *ngIf="currentStep === 'otp'" class="step-content">
+        <div class="otp-info">
+          <p>We've sent a 6-digit code to</p>
+          <strong>+91 {{phoneNumber}}</strong>
+          <button class="change-number" (click)="changeNumber()">Change</button>
+        </div>
+
+        <form (ngSubmit)="verifyOTP()" #otpForm="ngForm">
+          <div class="input-group">
+            <label for="otp">Enter OTP</label>
+            <input 
+              type="text" 
+              id="otp"
+              [(ngModel)]="otp" 
+              name="otp"
+              placeholder="Enter 6-digit code"
+              pattern="[0-9]{6}"
+              maxlength="6"
+              class="otp-input"
+              required>
+          </div>
+
+          <div class="otp-actions">
+            <button 
+              type="submit" 
+              class="btn-primary" 
+              [disabled]="isLoading || otpForm.invalid">
+              <span *ngIf="!isLoading">Verify & Login</span>
+              <span *ngIf="isLoading">Verifying...</span>
+            </button>
+          </div>
+
+          <div class="resend-section">
+            <p *ngIf="!canResend">Resend OTP in {{resendTimer}}s</p>
+            <button 
+              *ngIf="canResend" 
+              type="button" 
+              class="btn-link" 
+              (click)="resendOTP()">
+              Resend OTP
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <p>Don't have an account? <a routerLink="/register">Sign up</a></p>
+      <p>Use password instead? <a routerLink="/login">Login with Password</a></p>
+    </div>
+  </div>
+</div>

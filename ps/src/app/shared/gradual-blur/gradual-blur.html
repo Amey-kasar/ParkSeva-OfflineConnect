@@ -1,0 +1,14 @@
+<div 
+  class="gradual-blur-container"
+  [class.fixed-page]="target === 'page'"
+  [class.absolute-parent]="target === 'parent'"
+  [style.z-index]="zIndex"
+  [style.height]="currentHeight"
+  [style.width]="width"
+  [style.top]="position === 'bottom' ? 'auto' : 0"
+  [style.bottom]="position === 'top' ? 'auto' : 0"
+  [style.left]="position === 'right' ? 'auto' : 0"
+  [style.right]="position === 'left' ? 'auto' : 0"
+>
+  <div class="blur-layer" *ngFor="let layer of layers" [style]="layer"></div>
+</div>

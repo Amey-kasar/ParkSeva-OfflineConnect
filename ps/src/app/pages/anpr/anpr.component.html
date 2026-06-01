@@ -1,0 +1,97 @@
+<div class="anpr-container">
+  <div class="scanner-header">
+    <div class="header-title">
+      <h1>ANPR Scanner</h1>
+      <p>Real-time License Plate Recognition Engine</p>
+    </div>
+  </div>
+
+  <div class="scanner-grid">
+    <!-- LEFT COLUMN: Viewfinder -->
+    <div class="scanner-card">
+      <div class="result-header"><h2>Optical Feed</h2></div>
+      
+      <div class="image-wrapper mt-4">
+        <!-- Live Video Stream -->
+        <video #videoElement autoplay playsinline [class.hidden]="previewUrl" class="live-video"></video>
+        
+        <!-- Static Capture Preview (Shown after clicking capture) -->
+        <img *ngIf="previewUrl" [src]="previewUrl" class="vehicle-img" />
+
+        <!-- Hidden Canvas for frame processing -->
+        <canvas #canvasElement class="hidden-canvas"></canvas>
+        
+        <!-- Scanning Animation Overlay -->
+        <div class="scanner-laser" *ngIf="isScanning"></div>
+        <div class="scanning-overlay" *ngIf="isScanning">
+          <p class="scanning-text">Analyzing Frame...</p>
+        </div>
+      </div>
+
+      <div class="action-buttons mt-6">
+        <button *ngIf="!previewUrl" class="btn btn-primary" (click)="captureSnapshot()" [disabled]="!isCameraReady">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+          Capture Snapshot
+        </button>
+        <button *ngIf="previewUrl && !isScanning" class="btn btn-secondary" (click)="resetScanner()">
+          Restart Camera Feed
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Intelligence Output -->
+    <div class="results-card">
+      <div class="result-header"><h2>Neural Output</h2></div>
+
+      <!-- Result View -->
+      <div class="result-content" *ngIf="plateResult && !isScanning">
+        <div class="indian-number-plate">
+          <div class="ind-strip">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/20px-Flag_of_India.svg.png" alt="IND" class="ind-flag">
+            <span class="ind-text">IND</span>
+          </div>
+          <div class="plate-number">{{ formatPlate(plateResult) }}</div>
+        </div>
+
+        <div class="confidence-meter">
+          <span class="confidence-label">System Confidence</span>
+          <span class="confidence-val">{{ confidence }}%</span>
+        </div>
+
+        <div class="confidence-meter" *ngIf="verifyStatus === 'checking'">
+          <span class="confidence-label">{{ verifyMessage }}</span>
+        </div>
+
+        <div class="confidence-meter" *ngIf="verifyStatus === 'found'">
+          <span class="confidence-label">{{ verifyMessage }}</span>
+          <span class="confidence-val">Matched</span>
+        </div>
+
+        <div class="confidence-meter" *ngIf="verifyStatus === 'not-found' || verifyStatus === 'error'">
+          <span class="confidence-label">{{ verifyMessage }}</span>
+          <span class="confidence-val">{{ verifyStatus === 'error' ? 'Failed' : 'No Match' }}</span>
+        </div>
+
+        <div class="confidence-meter" *ngIf="matchedEntry">
+          <span class="confidence-label">Latest Entry Status</span>
+          <span class="confidence-val">{{ matchedEntry?.status | uppercase }}</span>
+        </div>
+
+        <div class="action-buttons mt-6">
+          <button class="btn btn-primary" (click)="verifySession()" [disabled]="verifyStatus === 'checking'">
+            Verify Session
+          </button>
+        </div>
+      </div>
+
+      <!-- Idle/Error States -->
+      <div class="idle-state" *ngIf="!plateResult && !isScanning && !errorMessage">
+        <p>Waiting for capture...</p>
+      </div>
+
+      <div class="error-box" *ngIf="errorMessage && !isScanning">
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>
+  </div>
+</div>

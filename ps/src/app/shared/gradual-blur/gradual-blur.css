@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  pointer-events: none; /* Allows clicking through the blur */
+}
+
+.gradual-blur-container {
+  display: block;
+  pointer-events: none;
+  overflow: hidden;
+  isolation: isolate; /* Creates a new stacking context */
+}
+
+/* Positioning Modes */
+.fixed-page {
+  position: fixed;
+}
+
+.absolute-parent {
+  position: absolute;
+}
+
+/* The Individual Blur Layers */
+.blur-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Hardware acceleration hints */
+  transform: translate3d(0,0,0); 
+  will-change: backdrop-filter;
+}
+
+/* Fallback for browsers not supporting backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .blur-layer {
+    background: rgba(255, 255, 255, 0.1); 
+  }
+}

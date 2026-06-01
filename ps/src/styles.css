@@ -1,0 +1,26 @@
+/* ===== GLOBAL THEME VARIABLES (src/styles.css) ===== */
+:root {
+  /* LIGHT MODE (Default) */
+  --bg-body: #f4f4f5;      
+  --bg-surface: #ffffff;   
+  --text-main: #09090b;    
+  --text-muted: #71717a;   
+  --border: #e4e4e7;
+  --primary-hover: #f4f4f5;
+}
+
+body.dark-theme {
+  /* DARK MODE OVERRIDES */
+  --bg-body: #09090b;       
+  --bg-surface: #18181b;    
+  --text-main: #f4f4f5;     
+  --text-muted: #a1a1aa;    
+  --border: #27272a;        
+  --primary-hover: #27272a; 
+}
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

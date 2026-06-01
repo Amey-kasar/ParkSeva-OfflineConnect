@@ -1,0 +1,398 @@
+/* Import Plus Jakarta Sans */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:host {
+  /* --- THEME VARIABLES --- */
+  --bg-body: #f9fafb;
+  --bg-surface: #ffffff;
+  --text-main: #09090b;
+  --text-muted: #71717a;
+  --border: #e4e4e7;
+  --border-focus: #09090b;
+  --font-main: 'Plus Jakarta Sans', sans-serif;
+  
+  /* FORCE HOST HEIGHT */
+  display: block;
+  height: 100vh; 
+}
+
+.parking-shell {
+  padding: 24px 32px;
+  background-color: var(--bg-body);
+  /* CRITICAL: Calculate exact height to fill screen */
+  height: calc(100vh - 60px); 
+  font-family: var(--font-main);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* --- HEADER --- */
+.page-header { 
+  margin-bottom: 8px; 
+  flex-shrink: 0; 
+}
+
+.header-text h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.03em;
+}
+
+.header-text p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* --- SPLIT LAYOUT --- */
+.finder-layout {
+  display: flex;
+  gap: 24px;
+  /* CRITICAL: Force layout to take remaining height */
+  flex: 1;
+  height: 100%; 
+  overflow: hidden;
+  position: relative;
+}
+
+/* --- SIDEBAR (LIST) --- */
+.sidebar-panel {
+  width: 400px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+  height: 100%; /* Ensure full height */
+}
+
+/* Search Input */
+.search-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 12px 12px 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: var(--font-main);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(9, 9, 11, 0.05);
+}
+
+/* List Container */
+.locations-list {
+  overflow-y: auto;
+  padding-right: 4px; 
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 20px;
+  flex: 1; /* Grow to fill space */
+}
+
+/* Location Card */
+.location-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s;
+}
+
+.location-card:hover {
+  border-color: #a1a1aa;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.distance-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--bg-body);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  color: var(--text-main);
+}
+
+.address-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+.address-text i { font-size: 0.8rem; margin-right: 4px; }
+
+/* Meta Data Grid */
+.meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.meta-item { display: flex; flex-direction: column; gap: 2px; }
+.meta-item .label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+.meta-item .value { font-size: 0.85rem; color: var(--text-main); font-weight: 500; }
+
+/* Buttons */
+.card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--text-main);
+  color: #fff;
+  border-color: var(--text-main);
+}
+.btn-primary:hover { background: #27272a; }
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-main);
+}
+.btn-outline:hover { background: var(--bg-body); border-color: var(--text-main); }
+
+/* Messages */
+.state-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+.state-message i { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+.state-message p { margin: 0; font-size: 0.9rem; }
+
+/* --- MAP PANEL --- */
+.map-panel {
+  flex: 1; /* Grow to fill width */
+  height: 100%; /* Fill height */
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative; /* Anchor for absolute container */
+}
+
+/* FIX: Force map container to fill the parent absolutely */
+.map-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* --- OPENLAYERS OVERRIDES --- */
+
+/* FIX: Ensure OpenLayers internal viewport stretches */
+:global(.ol-viewport) {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+}
+
+/* Popup Style */
+:global(.ol-popup) {
+  position: absolute;
+  background-color: var(--bg-surface);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  bottom: 12px;
+  left: -50px;
+  min-width: 260px;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  z-index: 1000;
+}
+
+:global(.ol-popup:after), :global(.ol-popup:before) {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+:global(.ol-popup:after) {
+  border-top-color: var(--bg-surface);
+  border-width: 10px;
+  left: 48px;
+  margin-left: -10px;
+}
+
+:global(.ol-popup:before) {
+  border-top-color: var(--border);
+  border-width: 11px;
+  left: 48px;
+  margin-left: -11px;
+}
+
+:global(.popup-content) { padding: 16px; }
+
+:global(.popup-closer) {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+:global(.popup-closer:hover) { color: var(--text-main); }
+
+:global(.popup-content h4) {
+  margin: 0 0 4px 0;
+  color: var(--text-main);
+  font-size: 1rem;
+  font-weight: 700;
+  padding-right: 16px;
+}
+
+:global(.popup-content p) {
+  margin: 4px 0 12px 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+:global(.popup-actions) {
+  display: flex;
+  gap: 8px;
+}
+
+/* Map Popup Buttons */
+:global(.btn-sm) {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+  text-align: center;
+  flex: 1;
+}
+
+:global(.btn-sm.btn-primary) {
+  background: #09090b;
+  color: white;
+  border-color: #09090b;
+}
+
+:global(.btn-sm.btn-secondary) {
+  background: white;
+  color: #09090b;
+  border-color: #e4e4e7;
+}
+:global(.btn-sm.btn-secondary:hover) {
+  background: #f9fafb;
+}
+
+/* Zoom Controls */
+:global(.ol-zoom) {
+  top: 12px;
+  left: 12px;
+  background-color: transparent;
+}
+:global(.ol-zoom button) {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin: 1px;
+  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+:global(.ol-zoom button:hover) { background-color: var(--bg-body); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .finder-layout {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .sidebar-panel {
+    width: 100%;
+    height: auto;
+    max-height: 50vh;
+  }
+  .map-panel {
+    height: 400px;
+    flex: none;
+  }
+  .parking-shell {
+    height: auto;
+    overflow-y: auto;
+  }
+}

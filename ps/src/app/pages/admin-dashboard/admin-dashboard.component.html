@@ -1,0 +1,131 @@
+<div class="parking-shell">
+  
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Admin Console</h1>
+      <p>System overview and quick management actions.</p>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Total Capacity</div>
+      <div class="stat-value">{{ stats.totalSlots }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Available</div>
+      <div class="stat-value text-success">{{ stats.availableSlots }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Occupied</div>
+      <div class="stat-value text-danger">{{ stats.occupiedSlots }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Revenue</div>
+      <div class="stat-value">₹{{ stats.totalRevenue }}</div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <div class="content-panel action-panel">
+      <div class="panel-header">
+        <h2>Create Slot</h2>
+      </div>
+      <form (ngSubmit)="createSlot()" class="action-form">
+        <div class="form-group">
+          <input [(ngModel)]="newSlot.slotNumber" name="slotNumber" placeholder="Slot No." required>
+        </div>
+        <div class="form-group">
+          <div class="select-wrapper">
+            <select [(ngModel)]="newSlot.vehicleType" name="vehicleType">
+              <option value="car">Car</option>
+              <option value="bike">Bike</option>
+              <option value="truck">Truck</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <input [(ngModel)]="newSlot.hourlyRate" name="hourlyRate" type="number" placeholder="Rate (₹)">
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Create</button>
+      </form>
+    </div>
+
+    <div class="content-panel action-panel">
+      <div class="panel-header">
+        <h2>Manual Park</h2>
+      </div>
+      <form (ngSubmit)="parkVehicle()" class="action-form">
+        <div class="form-group">
+          <input [(ngModel)]="parkingData.vehicleNumber" name="vehicleNumber" placeholder="Vehicle No." required>
+        </div>
+        <div class="form-group">
+          <div class="select-wrapper">
+            <select [(ngModel)]="parkingData.slotId" name="slotId" required>
+              <option value="">Select Available Slot</option>
+              <option *ngFor="let slot of slots" [value]="slot._id" [disabled]="slot.status !== 'available'">
+                {{ slot.slotNumber }} - {{ slot.vehicleType | titlecase }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Confirm Entry</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="grid-row">
+    
+    <div class="content-panel">
+      <div class="panel-header">
+        <h2>Slot Status</h2>
+      </div>
+      <div class="list-container">
+        <div *ngFor="let slot of slots" class="list-item">
+          <div class="item-info">
+            <span class="item-title">{{ slot.slotNumber }}</span>
+            <span class="item-sub">{{ slot.vehicleType | titlecase }} • ₹{{ slot.hourlyRate }}/hr</span>
+          </div>
+          <div class="item-actions">
+            <span class="status-pill" [class]="slot.status">{{ slot.status }}</span>
+            <button (click)="deleteSlot(slot._id)" class="btn-icon-danger" title="Delete">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-panel">
+      <div class="panel-header">
+        <h2>Active Sessions</h2>
+      </div>
+      <div class="list-container">
+        <div *ngFor="let entry of activeEntries" class="list-item">
+          <div class="item-info">
+            <span class="item-title font-mono">{{ entry.vehicleNumber }}</span>
+            <span class="item-sub">Slot {{ entry.slotId?.slotNumber }} • {{ entry.entryTime | date:'shortTime' }}</span>
+          </div>
+          <button (click)="exitVehicle(entry._id)" class="btn btn-outline btn-sm">Exit</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-panel">
+      <div class="panel-header">
+        <h2>Recent Payments</h2>
+      </div>
+      <div class="list-container">
+        <div *ngFor="let payment of payments.slice(0, 5)" class="list-item">
+          <div class="item-info">
+            <span class="item-title font-mono">₹{{ payment.amount }}</span>
+            <span class="item-sub">{{ payment.paymentMethod | titlecase }} • {{ payment.createdAt | date:'shortDate' }}</span>
+          </div>
+          <span class="status-text success">{{ payment.status }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

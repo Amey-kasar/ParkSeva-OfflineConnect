@@ -1,0 +1,125 @@
+<div class="parking-shell">
+  
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Payment Ledger</h1>
+      <p>Track revenue, pending dues, and transaction history.</p>
+    </div>
+  </div>
+
+  <div *ngIf="!isAdmin" class="empty-state">
+    <i class="fa-solid fa-lock empty-icon"></i>
+    <p>Access Denied. Administrator privileges required.</p>
+  </div>
+
+  <div *ngIf="isAdmin">
+    
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Today's Revenue</div>
+        <div class="stat-value">₹{{paymentStats.revenue}}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pending Dues</div>
+        <div class="stat-value text-warning">₹{{paymentStats.pending}}</div>
+      </div>
+    </div>
+
+    <div class="content-panel">
+      <div class="panel-header">
+        <h2>Transaction History</h2>
+        <div class="header-actions">
+          <button class="btn btn-primary" (click)="openModal()">
+            <i class="fa-solid fa-plus"></i> Record Payment
+          </button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle / ID</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let payment of payments">
+              <td>
+                <div class="vehicle-info">
+                  <span class="font-mono text-bold">{{payment.vehicleNumber}}</span>
+                  <span class="sub-text">{{payment.transactionId || '—'}}</span>
+                </div>
+              </td>
+              <td class="font-mono">₹{{payment.amountPaid}}</td>
+              <td>{{payment.paymentMethod | titlecase}}</td>
+              <td class="text-muted">{{payment.paymentDate | date:'MMM d, h:mm a'}}</td>
+              <td>
+                <span class="status-pill" [class]="payment.paymentStatus">
+                  {{payment.paymentStatus}}
+                </span>
+              </td>
+            </tr>
+            
+            <tr *ngIf="payments.length === 0">
+              <td colspan="5">
+                <div class="empty-table">No transactions recorded yet.</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal-window" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Record Payment</h3>
+        <button class="icon-close" (click)="closeModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="createPayment()" #paymentForm="ngForm">
+          
+          <div class="form-group">
+            <label>Vehicle Number</label>
+            <input type="text" [(ngModel)]="newPayment.vehicleNumber" name="vehicleNumber" required placeholder="e.g. MH 12 AB 1234">
+          </div>
+
+          <div class="form-group">
+            <label>Amount (₹)</label>
+            <input type="number" [(ngModel)]="newPayment.amountPaid" name="amountPaid" required placeholder="0.00">
+          </div>
+
+          <div class="form-group">
+            <label>Payment Method</label>
+            <div class="select-wrapper">
+              <select [(ngModel)]="newPayment.paymentMethod" name="paymentMethod" required>
+                <option value="cash">Cash</option>
+                <option value="razorpay">Razorpay / UPI</option>
+                <option value="wallet">Wallet</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="newPayment.paymentMethod === 'razorpay'">
+            <label>Transaction ID</label>
+            <input type="text" [(ngModel)]="newPayment.transactionId" name="transactionId" placeholder="Enter Reference ID">
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" (click)="closeModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!paymentForm.valid">Confirm Record</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>

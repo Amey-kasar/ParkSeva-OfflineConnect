@@ -1,0 +1,157 @@
+/* Import Plus Jakarta Sans */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:host {
+  /* --- SYSTEM PALETTE --- */
+  --bg-body: #f9fafb;     /* Zinc 50 */
+  --bg-surface: #ffffff;  /* White */
+  
+  --text-main: #09090b;   /* Zinc 950 */
+  --text-muted: #71717a;  /* Zinc 500 */
+  --text-inv: #ffffff;
+  
+  --border: #e4e4e7;      /* Zinc 200 */
+  --border-focus: #09090b; /* Black focus */
+
+  --font-main: 'Plus Jakarta Sans', sans-serif;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-body);
+  padding: 2rem 1rem;
+  font-family: var(--font-main);
+}
+
+.auth-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 8px; /* Slightly squared off for enterprise feel */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02); /* Very subtle shadow */
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* --- Brand Header --- */
+.brand-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  color: var(--text-main);
+}
+
+.brand-icon {
+  font-size: 1.5rem;
+}
+
+.brand-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* --- Typography --- */
+.auth-card h2 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.sub-text {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+}
+
+/* --- Forms --- */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 4px; /* Consistent square radius */
+  font-size: 0.9rem;
+  font-family: var(--font-main);
+  transition: all 0.2s ease;
+  background: var(--bg-surface);
+  color: var(--text-main);
+}
+
+.form-group input:focus, .form-group select:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  background: #fafafa;
+}
+
+.form-group input::placeholder {
+  color: #a1a1aa;
+}
+
+/* --- Buttons --- */
+.btn-primary {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--text-main); /* Black background */
+  color: var(--text-inv);
+  border: 1px solid var(--text-main);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #27272a; /* Dark Gray hover */
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  background: #a1a1aa;
+  border-color: #a1a1aa;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- Footer Link --- */
+.auth-card p {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.auth-card a {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.auth-card a:hover {
+  border-color: var(--text-main);
+}

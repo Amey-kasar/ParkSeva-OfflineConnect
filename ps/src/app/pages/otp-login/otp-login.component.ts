@@ -1,0 +1,1 @@
+// This component is no longer needed - OTP login is now integrated into the main login component

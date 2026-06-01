@@ -1,0 +1,123 @@
+<div class="parking-shell">
+  
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Parking History</h1>
+      <p>View past records, revenue logs, and analytics.</p>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fa-solid fa-indian-rupee-sign"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{historyStats.revenue}}</h3>
+        <p>Today's Revenue</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fa-solid fa-car"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{historyStats.total}}</h3>
+        <p>Total Vehicles</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fa-regular fa-clock"></i>
+      </div>
+      <div class="stat-content">
+        <h3>{{historyStats.avgHours}} hrs</h3>
+        <p>Avg. Duration</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-panel">
+    
+    <div class="panel-header">
+      <h2>Records Log</h2>
+      <button class="btn btn-outline btn-sm" (click)="exportToExcel()">
+        <i class="fa-solid fa-file-export"></i> Export CSV
+      </button>
+    </div>
+
+    <div class="filter-bar">
+      <div class="search-group">
+        <div class="input-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input 
+            type="text" 
+            [(ngModel)]="searchVehicle" 
+            placeholder="Search Vehicle No." 
+            (keydown.enter)="performSearch()">
+        </div>
+      </div>
+
+      <div class="date-group">
+        <div class="input-wrapper">
+          <i class="fa-regular fa-calendar"></i>
+          <input 
+            type="date" 
+            [(ngModel)]="selectedDate" 
+            (change)="filterByDate()">
+        </div>
+        <button class="btn btn-icon" (click)="showToday()" title="Reset to Today">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Vehicle Info</th>
+            <th>Slot</th>
+            <th>Entry Time</th>
+            <th>Exit Time</th>
+            <th>Duration</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of filteredRecords">
+            <td>
+              <div class="vehicle-info">
+                <span class="font-mono text-bold">{{record.vehicleInfo.vehicleNumber}}</span>
+                <span class="vehicle-type">{{record.vehicleInfo.vehicleType || 'Standard'}}</span>
+              </div>
+            </td>
+            <td><span class="badge">{{record.entryInfo.slotNumber}}</span></td>
+            <td class="text-muted">{{record.entryInfo.entryTime | date:'MMM d, h:mm a'}}</td>
+            <td class="text-muted">{{record.entryInfo.exitTime | date:'MMM d, h:mm a'}}</td>
+            <td>{{record.entryInfo.totalHours}}h</td>
+            <td class="font-mono text-bold">₹{{record.entryInfo.totalAmount}}</td>
+            <td>
+              <span class="status-pill" [class]="'status-' + (record.paymentInfo?.paymentStatus || 'unknown')">
+                {{record.paymentInfo?.paymentStatus || 'Unknown'}}
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="filteredRecords.length === 0">
+            <td colspan="7">
+              <div class="empty-state">
+                <i class="fa-solid fa-magnifying-glass empty-icon"></i>
+                <p>No records found for this criteria.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

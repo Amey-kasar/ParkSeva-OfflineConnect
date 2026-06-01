@@ -1,0 +1,44 @@
+{
+  "name": "parking-frontend",
+  "version": "1.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development"
+  },
+  "dependencies": {
+    "@angular/animations": "^17.3.0",
+    "@angular/common": "^17.3.0",
+    "@angular/compiler": "^17.3.0",
+    "@angular/core": "^17.3.0",
+    "@angular/forms": "^17.3.0",
+    "@angular/platform-browser": "^17.3.0",
+    "@angular/platform-browser-dynamic": "^17.3.0",
+    "@angular/router": "^17.3.0",
+    "@fortawesome/fontawesome-free": "^6.5.1",
+    "@zxing/library": "^0.21.3",
+    "@zxing/ngx-scanner": "^17.0.0",
+    "chart.js": "^4.4.1",
+    "gsap": "^3.14.2",
+    "jsqr": "^1.4.0",
+    "mathjs": "^12.4.0",
+    "primeicons": "^7.0.0",
+    "primeng": "^17.18.0",
+    "qrcode": "^1.5.3",
+    "rxjs": "~7.8.0",
+    "socket.io-client": "^4.7.4",
+    "tesseract.js": "^5.0.5",
+    "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
+    "zone.js": "~0.14.3"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^17.3.0",
+    "@angular/cli": "^17.3.0",
+    "@angular/compiler-cli": "^17.3.0",
+    "@types/node": "^18.18.0",
+    "@types/qrcode": "^1.5.5",
+    "typescript": "~5.4.2"
+  }
+}

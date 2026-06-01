@@ -1,0 +1,11 @@
+ultralytics
+opencv-python
+numpy
+twilio
+Flask
+flask-cors
+python-dotenv
+ffmpeg-python
+SpeechRecognition
+pymongo
+PyAudio

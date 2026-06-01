@@ -1,0 +1,100 @@
+<button class="chat-bubble-btn" (click)="toggleChat()" [class.is-open]="isOpen" [class.has-notification]="ticketNotification && !isOpen">
+  <div class="icon-wrapper">
+    <svg class="icon-chat" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+    </svg>
+    <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+  </div>
+</button>
+
+<div class="chat-widget-floating" [class.show]="isOpen">
+  
+  <div class="widget-header">
+    <div class="header-content">
+      <h3>ParkSeva Support</h3>
+      <p>{{ useGeminiAI ? 'ParkSeva AI Mode' : 'Quick Answers Mode' }}</p>
+    </div>
+    
+    <div class="mode-toggle" (click)="toggleAIMode()" [class.ai-active]="useGeminiAI" [title]="useGeminiAI ? 'Switch to Quick Answers' : 'Switch to ParkSeva AI'">
+      <div class="toggle-slider"></div>
+      
+      <div class="toggle-track">
+        <div class="toggle-icon quick-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+        </div>
+        <div class="toggle-icon ai-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="widget-messages" #messagesContainer>
+    <div class="message-row bot-row" *ngIf="messages.length === 0">
+      <div class="message-bubble bot-bubble">
+        <p>👋 Hi! I'm ParkSeva Assistant. How can I help you today?</p>
+      </div>
+    </div>
+
+    <div class="faq-chips-container" *ngIf="showFAQs && messages.length === 0">
+      <button *ngFor="let faq of helpCenterService.faqs" class="faq-chip-btn" (click)="selectFAQ(faq)">
+        {{ faq.question }}
+      </button>
+    </div>
+
+    <ng-container *ngFor="let message of messages; let i = index">
+      <div class="message-row" [class.user-row]="isMyMessage(message)" [class.bot-row]="!isMyMessage(message)">
+        <div class="message-bubble" [class.user-bubble]="isMyMessage(message)" [class.bot-bubble]="!isMyMessage(message)" [innerHTML]="formatMessage(message.message)">
+        </div>
+        <span class="message-time">{{ formatTime(message.timestamp) }}</span>
+      </div>
+
+      <div class="feedback-inline" *ngIf="!isMyMessage(message) && i === messages.length - 1 && showCSAT && !typingText">
+        <p class="feedback-label">Was this helpful?</p>
+        <div class="feedback-buttons">
+          <button class="feedback-btn positive" (click)="submitCSAT('POSITIVE')">👍 Yes</button>
+          <button class="feedback-btn neutral" (click)="submitCSAT('NEUTRAL')">😐 Okay</button>
+          <button class="feedback-btn negative" (click)="submitCSAT('NEGATIVE')">👎 No</button>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="message-row bot-row" *ngIf="typingText">
+      <div class="typing-bubble">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+    </div>
+
+    <div class="suggestions-container" *ngIf="suggestions.length > 0">
+      <button *ngFor="let suggestion of suggestions" class="suggestion-btn" (click)="selectFAQ(suggestion)">
+        {{ suggestion.question }}
+      </button>
+    </div>
+  </div>
+
+  <div class="widget-input">
+    <input type="text" [(ngModel)]="newMessage" (input)="onInputChange()" (keyup.enter)="sendMessage()" placeholder="Type your message..." class="chat-input" />
+    <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<div class="ticket-toast" *ngIf="ticketNotification">
+  <div class="toast-content">
+    <strong>Support Response Received</strong>
+    <p>{{ ticketNotification.id }}</p>
+  </div>
+  <div class="toast-actions">
+    <button class="toast-btn primary" (click)="viewTicketResponse()">View</button>
+    <button class="toast-btn" (click)="dismissNotification()">Dismiss</button>
+  </div>
+</div>

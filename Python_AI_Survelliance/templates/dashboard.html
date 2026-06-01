@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkSeva Surveillance Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+  </head>
+  <body>
+    <div class="layout">
+      <header class="topbar">
+        <div class="branding">
+          <span class="app-name">ParkSeva</span>
+          <span class="subtitle">Safety Console</span>
+        </div>
+        <div class="status">
+          <span id="sse-status" class="status-badge">Connecting…</span>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="card video-panel">
+          <div class="card-header">
+            <h2>Live Camera</h2>
+          </div>
+          <div class="card-body video-container">
+            <img id="video-stream" src="{{ url_for('video_feed') }}" alt="Live camera" />
+          </div>
+        </section>
+
+        <section class="card alerts-panel">
+          <div class="card-header">
+            <h2>Realtime Alerts</h2>
+            <p class="card-subtitle">Incoming events from camera and audio monitors.</p>
+          </div>
+          <div id="alerts-feed" class="card-body alerts-feed"></div>
+        </section>
+
+        <section class="card evidence-panel">
+          <div class="card-header">
+            <h2>Evidence Gallery</h2>
+            <p class="card-subtitle">Snapshots stored in MongoDB.</p>
+          </div>
+          <div id="evidence-grid" class="card-body evidence-grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <div id="alert-popups" class="alert-popups"></div>
+
+    <script defer src="{{ url_for('static', filename='dashboard.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,419 @@
+/* Import Plus Jakarta Sans */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:host {
+  /* --- THEME VARIABLES --- */
+  --bg-body: #f9fafb;
+  --bg-surface: #ffffff;
+  
+  --text-main: #09090b;   /* Zinc 950 */
+  --text-muted: #71717a;  /* Zinc 500 */
+  
+  --border: #e4e4e7;      /* Zinc 200 */
+  --border-focus: #09090b;
+
+  --status-avail-bg: #ffffff;
+  --status-avail-border: #e4e4e7;
+  --status-avail-dot: #22c55e; /* Green */
+
+  --status-occ-bg: #f4f4f5;    /* Zinc 100 */
+  --status-occ-border: #d4d4d8;
+  --status-occ-dot: #ef4444;   /* Red */
+
+  --font-main: 'Plus Jakarta Sans', sans-serif;
+}
+
+.parking-shell {
+  padding: 24px 32px;
+  background-color: var(--bg-body);
+  min-height: 100%;
+  font-family: var(--font-main);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --- PAGE HEADER --- */
+.page-header {
+  margin-bottom: 8px;
+}
+
+.header-text h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.03em;
+}
+
+.header-text p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* --- CONTENT PANELS --- */
+.content-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.panel-header h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* --- SLOT GRID --- */
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.slot-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100px;
+  transition: all 0.2s ease;
+}
+
+/* Slot States */
+.slot-card.available {
+  background: var(--status-avail-bg);
+  border-color: var(--status-avail-border);
+}
+.slot-card.available .status-dot { background: var(--status-avail-dot); }
+.slot-card.available .slot-status-text { color: var(--status-avail-dot); }
+
+.slot-card.occupied {
+  background: var(--status-occ-bg);
+  border-color: var(--status-occ-border);
+}
+.slot-card.occupied .status-dot { background: var(--status-occ-dot); }
+.slot-card.occupied .slot-status-text { color: var(--status-occ-dot); }
+
+.slot-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.slot-id {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.slot-bottom {
+  display: flex;
+  flex-direction: column;
+}
+
+.slot-type {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.slot-status-text {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* --- TABLE --- */
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th {
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
+}
+
+tr:last-child td { border-bottom: none; }
+
+.font-mono { font-family: monospace; letter-spacing: -0.02em; }
+.text-muted { color: var(--text-muted); }
+.text-right { text-align: right; }
+
+.badge {
+  background: var(--bg-body);
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* --- BUTTONS --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+
+.btn-primary {
+  background: var(--text-main);
+  color: white;
+  border-color: var(--text-main);
+}
+.btn-primary:hover {
+  background: #27272a;
+}
+.btn-primary:disabled {
+  background: #a1a1aa;
+  border-color: #a1a1aa;
+  cursor: not-allowed;
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-main);
+}
+.btn-outline:hover {
+  background: var(--bg-body);
+  border-color: var(--text-main);
+}
+
+.btn-link-danger {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.btn-link-danger:hover { text-decoration: underline; }
+
+/* --- MODALS --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6); /* Slightly darker */
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; 
+}
+
+/* Standard Modal Window */
+.modal-window {
+  background: var(--bg-surface);
+  /* Force fixed width, max out at 90% of screen */
+  width: 500px !important; 
+  max-width: 90vw;
+  
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  animation: modalFadeIn 0.2s ease-out;
+  color: var(--text-main);
+}
+
+/* Scanner Modal - Wider */
+.modal-window.large { 
+  width: 700px !important;
+  max-width: 95vw;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-surface);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.icon-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  line-height: 1;
+}
+.icon-close:hover { color: var(--text-main); }
+
+.modal-body {
+  padding: 24px;
+  background: var(--bg-surface);
+}
+
+.modal-body.centered { text-align: center; }
+
+.modal-footer {
+  padding: 16px 24px;
+  background: var(--bg-body); 
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Forms in Modals */
+.form-group { margin-bottom: 16px; }
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-main);
+}
+
+.form-group input, .select-wrapper select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: var(--font-main);
+  background: #fff;
+  color: var(--text-main);
+  transition: border-color 0.2s;
+  box-sizing: border-box; 
+}
+
+.form-group input:focus, .select-wrapper select:focus {
+  outline: none;
+  border-color: var(--border-focus);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.helper-text {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* --- FORCE SCANNER COMPONENT STYLES (MONOCHROME) --- */
+/* These rules use ::ng-deep to override the child component styles */
+
+/* 1. Tabs - Remove Blue */
+::ng-deep app-qr-scanner .tab {
+  background: transparent !important;
+  color: var(--text-main) !important;
+  border: 1px solid transparent !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 4px !important;
+  font-weight: 600 !important;
+}
+
+/* 2. Active Tab - Make Black */
+::ng-deep app-qr-scanner .tab.active {
+  background-color: var(--bg-body) !important;
+  border-color: var(--border) !important;
+  border-bottom-color: var(--text-main) !important; /* Underline indicator */
+  color: var(--text-main) !important;
+}
+
+/* 3. Green Button -> Black Button */
+::ng-deep app-qr-scanner button.btn-success,
+::ng-deep app-qr-scanner .start-camera-btn {
+  background-color: var(--text-main) !important;
+  border-color: var(--text-main) !important;
+  color: #fff !important;
+  border-radius: 6px !important;
+  font-family: var(--font-main) !important;
+  font-weight: 600 !important;
+  padding: 10px 20px !important;
+}
+
+/* 4. Inputs inside scanner */
+::ng-deep app-qr-scanner input {
+  border: 1px solid var(--border) !important;
+  border-radius: 6px !important;
+  padding: 10px !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .parking-shell { padding: 16px; }
+  .slots-grid { grid-template-columns: repeat(2, 1fr); }
+  .panel-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .header-actions { width: 100%; }
+  .btn { flex: 1; }
+  
+  /* On mobile, allow full width for modal */
+  .modal-window, .modal-window.large {
+    width: 95% !important;
+  }
+}

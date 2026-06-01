@@ -1,0 +1,217 @@
+<div class="dashboard-shell">
+  <header class="top-row">
+    <div class="top-left">
+      <h1 class="title">Welcome Back</h1>
+      <p class="subtitle">Smart, AI-assisted insights for your parking business</p>
+    </div>
+
+    <div class="top-right">
+      <button 
+        pButton 
+        class="export-btn p-button-text p-button-secondary"
+        icon="pi pi-download" 
+        label="Export Report" 
+        (click)="exportPDF()">
+      </button>
+    </div>
+  </header>
+
+  <div class="stats-row">
+    <app-stat-card
+      title="Vehicles Today"
+      icon="pi pi-car"
+      [value]="stats.totalVehicles"
+      theme="primary">
+    </app-stat-card>
+
+    <app-stat-card
+      title="Active Entries"
+      icon="pi pi-bolt"
+      [value]="stats.activeEntries"
+      theme="success">
+    </app-stat-card>
+
+    <app-stat-card
+      title="Available Slots"
+      icon="pi pi-map-marker"
+      [value]="stats.availableSlots"
+      theme="warning">
+    </app-stat-card>
+
+    <app-stat-card
+      title="Daily Revenue"
+      icon="pi pi-credit-card"
+      [value]="'₹' + stats.dailyRevenue"
+      theme="secondary">
+    </app-stat-card>
+  </div>
+
+  <div class="content-card">
+
+    <section class="today-section">
+      <div class="section-header">
+        <h2>Today Overview</h2>
+      </div>
+
+      <div class="today-grid">
+        <div class="today-col">
+          <h3 class="col-title">Live Occupancy</h3>
+          <div class="occupancy-main">
+            <div class="occupancy-number">
+              {{ getOccupancyPercentage() }}%
+              <span>occupied</span>
+            </div>
+            <div class="donut-wrapper">
+              <p-chart 
+                type="doughnut" 
+                [data]="occupancyChartData" 
+                [options]="donutOptions"
+                height="100%" 
+                width="100%">
+              </p-chart>
+            </div>
+          </div>
+
+          <div class="occupancy-breakdown">
+            <div class="row">
+              <span>Active entries</span>
+              <strong>{{ stats.activeEntries }}</strong>
+            </div>
+            <div class="row">
+              <span>Available slots</span>
+              <strong>{{ stats.availableSlots }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="today-col">
+          <h3 class="col-title">Today’s Revenue</h3>
+          <div class="revenue-main">
+            <div class="revenue-value">
+              ₹{{ stats.dailyRevenue }}
+            </div>
+            <div class="revenue-sub">
+              vs yesterday: <span class="neutral-text">+4.2% (AI Est.)</span>
+            </div>
+          </div>
+
+          <div class="target-wrapper">
+            <div class="target-label">
+              Daily target
+              <span>₹15,000</span>
+            </div>
+            <p-progressBar 
+              [value]="getTargetProgress()" 
+              [showValue]="false" 
+              [style]="{'height': '6px'}">
+            </p-progressBar>
+          </div>
+
+          <div class="mini-metrics">
+            <div class="mini-item">
+              <span>Avg. stay duration</span>
+              <strong>1h 42m</strong>
+            </div>
+            <div class="mini-item">
+              <span>Turnover rate</span>
+              <strong>High</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="today-col today-ai">
+          <h3 class="col-title">AI Insights & Alerts</h3>
+
+          <div class="ai-summary">
+            <div class="summary-label">Today’s Summary</div>
+            <p>{{ aiSummary }}</p>
+          </div>
+
+          <div class="ai-tags">
+            <p-tag 
+              severity="info" 
+              [value]="'Peak: ' + aiPredictions.peakTime"
+              [style]="{'font-size': '10px', 'padding-left': '8px', 'padding-right': '8px'}">
+            </p-tag>
+
+            <p-tag 
+              severity="warning" 
+              [value]="'Risk: ' + aiPredictions.riskLevel"
+              [style]="{'font-size': '10px','padding-left': '8px', 'padding-right': '8px'}">
+            </p-tag>
+          </div>
+
+          <div class="ai-alerts">
+            <div class="alert-row">
+              <div style="display:flex; align-items:center;">
+                <span class="dot dot-warning"></span>
+                <span>Pending Reviews</span>
+              </div>
+              <strong>2</strong>
+            </div>
+            <div class="alert-row">
+              <div style="display:flex; align-items:center;">
+                <span class="dot dot-ok"></span>
+                <span>System Health</span>
+              </div>
+              <strong style="color:var(--green-600)">Good</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bottom-grid">
+      <div class="bottom-col">
+        <div class="section-header tight">
+          <h2>Revenue & Occupancy (7 days)</h2>
+        </div>
+        <div class="chart-wrapper">
+          <p-chart 
+            type="line" 
+            [data]="revenueChartData" 
+            [options]="chartOptions"
+            height="100%" 
+            width="100%">
+          </p-chart>
+        </div>
+      </div>
+
+      <div class="bottom-col" style="border-left: 1px solid #f1f5f9; padding-left: 10px;">
+        <div class="section-header tight">
+          <h2>Customer Experience</h2>
+        </div>
+
+        <div class="csat-top">
+          <div class="csat-score">
+            <span class="csat-label">CSAT Score</span>
+            <span class="csat-value">{{ csatScore }}%</span>
+            <span class="csat-sub">Based on {{ csatTotal }} ratings</span>
+          </div>
+        </div>
+
+        <div class="csat-bars">
+          <div class="bar-row">
+            <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+              <span>Positive</span> <span>{{ sentiments.positive }}%</span>
+            </div>
+            <p-progressBar [value]="sentiments.positive" [showValue]="false" [style]="{'height': '6px'}" color="#22c55e"></p-progressBar>
+          </div>
+          <div class="bar-row">
+            <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+              <span>Neutral</span> <span>{{ sentiments.neutral }}%</span>
+            </div>
+            <p-progressBar [value]="sentiments.neutral" [showValue]="false" [style]="{'height': '6px'}" color="#eab308"></p-progressBar>
+          </div>
+          <div class="bar-row">
+            <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+              <span>Negative</span> <span>{{ sentiments.negative }}%</span>
+            </div>
+            <p-progressBar [value]="sentiments.negative" [showValue]="false" [style]="{'height': '6px'}" color="#ef4444"></p-progressBar>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

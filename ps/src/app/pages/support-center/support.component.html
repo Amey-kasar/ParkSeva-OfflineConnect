@@ -1,0 +1,111 @@
+<div class="support-shell">
+  <div class="support-header">
+    <div class="header-left">
+      <h1>Support Center</h1>
+      <p class="subtitle">Manage customer support tickets</p>
+    </div>
+    <button class="refresh-btn" (click)="loadTickets()">
+      <i class="pi pi-refresh"></i> Refresh
+    </button>
+  </div>
+
+  <div class="support-layout">
+    <!-- Sidebar: Tickets List -->
+    <div class="tickets-sidebar">
+      <div class="sidebar-header">
+        <h3>Active Tickets</h3>
+        <span class="ticket-count">{{ tickets.length }}</span>
+      </div>
+      
+      <div class="tickets-scroll">
+        <div *ngIf="tickets.length === 0" class="empty-state">
+          <i class="pi pi-inbox"></i>
+          <p>No active tickets</p>
+        </div>
+        
+        <div 
+          *ngFor="let ticket of tickets" 
+          class="ticket-item"
+          [class.active]="selectedTicket?.id === ticket.id"
+          (click)="selectTicket(ticket)">
+          <div class="ticket-item-header">
+            <span class="ticket-id">{{ ticket.id }}</span>
+            <span class="ticket-badge" [ngClass]="ticket.status.toLowerCase()">
+              {{ ticket.status }}
+            </span>
+          </div>
+          <p class="ticket-desc">{{ ticket.description }}</p>
+          <span class="ticket-date">{{ ticket.createdAt | date:'short' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main: Chat Interface -->
+    <div class="chat-area">
+      <div *ngIf="!selectedTicket" class="empty-chat">
+        <i class="pi pi-comments"></i>
+        <h3>Select a ticket to start</h3>
+        <p>Choose a ticket from the sidebar to view details and respond</p>
+      </div>
+
+      <div *ngIf="selectedTicket" class="chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <div class="chat-header-info">
+            <h2>{{ selectedTicket.id }}</h2>
+            <span class="issue-type">{{ selectedTicket.issueType }}</span>
+          </div>
+          <span class="status-pill" [ngClass]="selectedTicket.status.toLowerCase()">
+            {{ selectedTicket.status }}
+          </span>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages">
+          <div class="message user-message">
+            <div class="message-header">
+              <span class="sender">Customer</span>
+              <span class="time">{{ selectedTicket.createdAt | date:'short' }}</span>
+            </div>
+            <div class="message-bubble user">
+              {{ selectedTicket.description }}
+            </div>
+          </div>
+
+          <div *ngIf="selectedTicket.response" class="message bot-message">
+            <div class="message-header">
+              <span class="sender">ParkSeva Assistent</span>
+              <span class="time">Just now</span>
+            </div>
+            <div class="message-bubble bot">
+              {{ selectedTicket.response }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-area">
+          <textarea 
+            [(ngModel)]="responseText" 
+            placeholder="Type your response to the customer..."
+            rows="3">
+          </textarea>
+          <div class="input-actions">
+            <span class="hint">Click Send Response button to reply</span>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="requestCall()">
+                <i class="pi pi-phone"></i> Request Call
+              </button>
+              <button class="btn-primary" (click)="sendResponse()" [disabled]="!responseText.trim()">
+                <i class="pi pi-send"></i> Send Response
+              </button>
+              <button class="btn-close-ticket" (click)="closeTicket()">
+                <i class="pi pi-check-circle"></i> Close Ticket
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

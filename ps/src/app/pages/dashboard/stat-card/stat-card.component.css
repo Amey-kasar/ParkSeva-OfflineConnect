@@ -1,0 +1,56 @@
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.4rem;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+}
+
+.icon-wrapper {
+  width: 55px;
+  height: 55px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+}
+
+.stat-card.primary .icon-wrapper {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.stat-card.success .icon-wrapper {
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+}
+
+.stat-card.warning .icon-wrapper {
+  background: linear-gradient(135deg, #ff9a56, #ff6b6b);
+}
+
+.stat-card.secondary .icon-wrapper {
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+}
+
+.details .label {
+  font-size: 0.85rem;
+  margin: 0;
+  color: #607080;
+}
+
+.details .value {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #1e293b;
+}

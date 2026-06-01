@@ -1,0 +1,96 @@
+<div class="auth-shell">
+  <div class="auth-card">
+    
+    <div class="card-header">
+      <h2>Admin Setup</h2>
+      <p>Initialize your facility management account.</p>
+    </div>
+
+    <form (ngSubmit)="onRegister()" #adminForm="ngForm">
+      
+      <div class="form-section">
+        <h3 class="section-title"><i class="fa-regular fa-user"></i> Administrator</h3>
+        
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" [(ngModel)]="adminData.name" name="name" required placeholder="e.g. Jane Doe">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" [(ngModel)]="adminData.phoneNumber" name="phoneNumber" required placeholder="+91...">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="adminData.email" name="email" placeholder="Optional">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" [(ngModel)]="adminData.password" name="password" required placeholder="Create a strong password">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form-section">
+        <h3 class="section-title"><i class="fa-solid fa-building"></i> Facility Details</h3>
+        
+        <div class="form-group">
+          <label>Location Name</label>
+          <input type="text" [(ngModel)]="locationData.locationName" name="locationName" required placeholder="e.g. City Center Parking">
+        </div>
+
+        <div class="form-group">
+          <label>Address</label>
+          <textarea [(ngModel)]="locationData.address" name="address" rows="2" required placeholder="Full street address"></textarea>
+        </div>
+
+        <div class="coordinates-wrapper">
+          <div class="coords-header">
+            <label>Coordinates</label>
+            <button type="button" class="btn-link" (click)="getCurrentLocation()">
+              <i class="fa-solid fa-location-crosshairs"></i> Auto-detect
+            </button>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <input type="number" [(ngModel)]="locationData.coordinates.latitude" name="latitude" step="any" placeholder="Lat" required>
+            </div>
+            <div class="form-group">
+              <input type="number" [(ngModel)]="locationData.coordinates.longitude" name="longitude" step="any" placeholder="Long" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group mt-2">
+          <label>Operating Hours</label>
+          <div class="form-row">
+            <div class="time-input">
+              <span>Open</span>
+              <input type="time" [(ngModel)]="locationData.operatingHours.open" name="openTime">
+            </div>
+            <div class="time-input">
+              <span>Close</span>
+              <input type="time" [(ngModel)]="locationData.operatingHours.close" name="closeTime">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button type="submit" class="btn btn-primary full-width" [disabled]="!adminForm.valid || isLoading">
+          <span *ngIf="!isLoading">Create Admin Account</span>
+          <span *ngIf="isLoading"><i class="fa-solid fa-circle-notch fa-spin"></i> Processing...</span>
+        </button>
+        
+        <div class="login-prompt">
+          Already registered? <a routerLink="/login">Sign in</a>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

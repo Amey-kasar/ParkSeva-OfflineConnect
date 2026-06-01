@@ -1,0 +1,174 @@
+<div class="parking-shell">
+  
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Slot Management</h1>
+      <p>Configure floors, arrange layouts, and manage slot status.</p>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Total Capacity</div>
+      <div class="stat-value">{{ slotStats.total }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Available</div>
+      <div class="stat-value text-success">{{ slotStats.available }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Occupied</div>
+      <div class="stat-value text-danger">{{ slotStats.occupied }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Maintenance</div>
+      <div class="stat-value text-warning">{{ slotStats.maintenance }}</div>
+    </div>
+  </div>
+
+  <div class="content-panel">
+    <div class="panel-header">
+      <h2>Floor Layout</h2>
+      <div class="header-actions">
+        <button class="btn btn-outline" (click)="openFloorModal()">
+          <i class="fa-solid fa-layer-group"></i> Add Floor
+        </button>
+        <button class="btn btn-primary" (click)="openAddModal()">
+          <i class="fa-solid fa-plus"></i> Add Slot
+        </button>
+      </div>
+    </div>
+
+    <div class="floors-container">
+      <div class="floor-card" *ngFor="let fl of floors">
+        <div class="floor-header">
+          <h3>{{ fl.label }}</h3>
+          <span class="badge">{{ fl.type | titlecase }}</span>
+        </div>
+        
+        <div class="slot-matrix">
+          <div *ngFor="let row of getFloorRows(fl)" class="matrix-row">
+            <div
+              *ngFor="let col of getFloorCols(fl)"
+              class="slot-box"
+              [ngClass]="getSlotClass(row + col, fl.type)"
+              (click)="selectSlotFromMatrix(row + col, fl.type)">
+              {{ row + col }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
+    <div class="modal-window" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Add New Slot</h3>
+        <button class="icon-close" (click)="closeAddModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Vehicle Type</label>
+          <div class="select-wrapper">
+            <select [(ngModel)]="newSlot.vehicleType" (change)="onVehicleTypeChange()">
+              <option value="">Select Type...</option>
+              <option value="bike">Bike</option>
+              <option value="car">Car</option>
+              <option value="truck">Truck</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="preview-section" *ngIf="newSlot.vehicleType">
+          <label class="section-label">Select Position</label>
+          
+          <div class="slots-preview-grid">
+            <div
+              *ngFor="let slot of getAvailableSlotsByType(newSlot.vehicleType)"
+              class="slot-mini available"
+              (click)="selectSlotForBooking(slot)">
+              {{ convertForDisplay(slot) }}
+            </div>
+            
+            <div
+              *ngFor="let emptySlot of getEmptySlotsByType(newSlot.vehicleType)"
+              class="slot-mini empty"
+              (click)="selectEmptySlot(emptySlot)">
+              {{ emptySlot }}
+            </div>
+          </div>
+
+          <p class="helper-text" 
+             *ngIf="getAvailableSlotsByType(newSlot.vehicleType).length === 0 && getEmptySlotsByType(newSlot.vehicleType).length === 0">
+             No slots available for this vehicle type. Please add a floor first.
+          </p>
+        </div>
+
+        <div class="form-group" *ngIf="selectedSlotForBooking">
+          <label>Selected Slot</label>
+          <div class="selected-value">{{ selectedSlotForBooking }}</div>
+        </div>
+
+        <div class="form-group">
+          <label>Hourly Rate (₹)</label>
+          <input type="number" [(ngModel)]="newSlot.hourlyRate" min="1" placeholder="e.g. 50">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline" (click)="closeAddModal()">Cancel</button>
+        <button class="btn btn-primary" (click)="addSlot()" [disabled]="!isFormValid()">Confirm Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showFloorModal" (click)="closeFloorModal()">
+    <div class="modal-window" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Configure Floor</h3>
+        <button class="icon-close" (click)="closeFloorModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Floor Name</label>
+          <input type="text" [(ngModel)]="floorForm.label" placeholder="e.g. Level 1 - Cars">
+        </div>
+
+        <div class="form-group">
+          <label>Vehicle Type</label>
+          <div class="select-wrapper">
+            <select [(ngModel)]="floorForm.type">
+              <option value="bike">Bike</option>
+              <option value="car">Car</option>
+              <option value="truck">Truck</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Row Letter</label>
+            <input type="text" maxlength="1" [(ngModel)]="floorForm.startLetter" placeholder="A" class="uppercase-input">
+          </div>
+          <div class="form-group">
+            <label>Rows</label>
+            <input type="number" min="1" max="10" [(ngModel)]="floorForm.rows">
+          </div>
+          <div class="form-group">
+            <label>Columns</label>
+            <input type="number" min="1" max="20" [(ngModel)]="floorForm.cols">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline" (click)="closeFloorModal()">Cancel</button>
+        <button class="btn btn-primary" (click)="saveFloor()" [disabled]="!isFloorFormValid()">Save Layout</button>
+      </div>
+    </div>
+  </div>
+
+</div>

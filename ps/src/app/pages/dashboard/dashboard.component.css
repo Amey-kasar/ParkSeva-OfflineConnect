@@ -1,0 +1,343 @@
+:host {
+  display: block;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #f8fafc; /* Slate 50 */
+}
+
+.dashboard-shell {
+  padding: 16px 24px;
+  /* Fixed height minus header */
+  height: calc(100vh - 60px); 
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* TOP BAR */
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.top-left .title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.top-left .subtitle {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.top-right {
+  display: flex;
+  gap: 8px;
+}
+
+.export-btn {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* FIX: Add spacing between icon and text in PrimeNG button */
+.export-btn ::ng-deep .p-button-icon {
+  margin-right: 0.5rem;
+}
+
+/* KPI ROW */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+/* MAIN FRAME CARD */
+.content-card {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  /* FIX: Enable internal scrolling so content isn't cut off */
+  overflow-y: auto; 
+  min-height: 0; 
+}
+
+/* SECTION HEADERS */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.section-header.tight {
+  margin-bottom: 8px;
+}
+
+/* TODAY OVERVIEW GRID */
+.today-section {
+  flex-shrink: 0; /* Keep this height stable */
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 20px;
+}
+
+.today-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+.today-col {
+  padding-right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.today-col:not(:last-child) {
+  border-right: 1px solid #f1f5f9;
+}
+
+.col-title {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* OCCUPANCY COLUMN */
+.occupancy-main {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  height: 80px; /* Fixed height for consistency */
+}
+
+.occupancy-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
+}
+
+.occupancy-number span {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.donut-wrapper {
+  width: 80px;
+  height: 80px;
+}
+
+.occupancy-breakdown {
+  font-size: 0.75rem;
+  color: #64748b;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.occupancy-breakdown .row {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* REVENUE COLUMN */
+.revenue-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.revenue-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.revenue-sub {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.neutral-text { color: #22c55e; font-weight: 600; }
+
+.target-wrapper {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.target-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.mini-metrics {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.mini-item {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.7rem;
+  color: #64748b;
+}
+.mini-item strong {
+  font-size: 0.85rem;
+  color: #334155;
+  margin-top: 2px;
+}
+
+/* AI COLUMN */
+.today-ai {
+  padding-left: 12px;
+}
+
+.ai-summary {
+  font-size: 0.8rem;
+  color: #475569;
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 6px;
+  border-left: 3px solid #6366f1;
+}
+
+.summary-label {
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #6366f1;
+  margin-bottom: 2px;
+}
+
+/* AI TAGS - FIXED CONGESTION */
+.ai-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px; /* Increased gap */
+  margin-top: 10px;
+}
+
+.ai-alerts {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.alert-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #334155;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.dot-warning { background: #f97316; }
+.dot-ok { background: #22c55e; }
+
+/* BOTTOM GRID: TRENDS + CSAT */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  /* FIX: Ensure charts have minimum height and can expand/scroll */
+  flex: 1; 
+  min-height: 250px; 
+  padding-bottom: 20px; /* Add padding for scroll breathing room */
+}
+
+.bottom-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* CHART WRAPPER */
+.chart-wrapper {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+/* CSAT */
+.csat-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.csat-score {
+  display: flex;
+  flex-direction: column;
+}
+
+.csat-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 600; }
+.csat-value { font-size: 2.5rem; font-weight: 800; color: #2563eb; line-height: 1; margin: 4px 0; }
+.csat-sub { font-size: 0.75rem; color: #94a3b8; }
+
+.csat-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.bar-row {
+  font-size: 0.75rem;
+  color: #475569;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .today-grid { grid-template-columns: 1fr; }
+  .today-col:not(:last-child) { border-right: none; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; }
+  .bottom-grid { grid-template-columns: 1fr; }
+  /* Allow shell to scroll naturally on small screens */
+  .dashboard-shell { height: auto; overflow-y: auto; }
+}

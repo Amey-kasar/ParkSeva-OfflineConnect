@@ -1,0 +1,158 @@
+<div class="parking-shell">
+  
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Vehicle Management</h1>
+      <p>Monitor slots and manage entry/exit operations.</p>
+    </div>
+  </div>
+
+  <div class="content-panel">
+    <div class="panel-header">
+      <h2>Slot Overview</h2>
+      <div class="header-actions">
+        <button class="btn btn-primary" (click)="openParkModal()">
+          <i class="fa-solid fa-plus"></i> Park Vehicle
+        </button>
+        <button class="btn btn-outline" (click)="openScannerModal()">
+          <i class="fa-solid fa-qrcode"></i> Scan Exit
+        </button>
+      </div>
+    </div>
+
+    <div class="slots-grid">
+      <div class="slot-card"
+           *ngFor="let slot of parkingSlots"
+           [class.occupied]="slot.status === 'occupied'"
+           [class.maintenance]="slot.status === 'maintenance'"
+           [class.available]="slot.status === 'available'">
+        
+        <div class="slot-top">
+          <span class="slot-id">{{slot.slotNumber}}</span>
+          <span class="status-dot"></span>
+        </div>
+        
+        <div class="slot-bottom">
+          <span class="slot-type">{{slot.vehicleType | titlecase}}</span>
+          <span class="slot-status-text">{{slot.status}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-panel">
+    <div class="panel-header">
+      <h2>Active Sessions</h2>
+      <button class="btn btn-outline btn-sm" (click)="openCheckoutModal()">
+        Manual Exit
+      </button>
+    </div>
+
+    <div class="table-container" *ngIf="activeEntries.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Vehicle No.</th>
+            <th>Slot</th>
+            <th>Entry Time</th>
+            <th>Duration</th>
+            <th class="text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of activeEntries">
+            <td class="font-mono"><strong>{{entry.vehicleNumber}}</strong></td>
+            <td><span class="badge">{{entry.slotNumber}}</span></td>
+            <td class="text-muted">{{entry.entryTime | date:'shortTime'}}</td>
+            <td class="text-muted">{{entry.duration}}</td>
+            <td class="text-right">
+              <button class="btn-link-danger" (click)="exitVehicleByNumber(entry.vehicleNumber)">
+                End Session
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="activeEntries.length === 0" class="empty-state">
+      <p>No vehicles currently in premise.</p>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showParkModal" (click)="closeParkModal()">
+    <div class="modal-window" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Park Vehicle</h3>
+      </div>
+      <form (ngSubmit)="parkVehicle()" #parkForm="ngForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Vehicle Number</label>
+            <input type="text" [(ngModel)]="parkData.vehicleNumber" name="vehicleNumber" placeholder="e.g. MH 12 AB 1234" required>
+          </div>
+          <div class="form-group">
+            <label>Vehicle Type</label>
+            <div class="select-wrapper">
+              <select [(ngModel)]="parkData.vehicleType" name="vehicleType" required>
+                <option value="car">Car</option>
+                <option value="bike">Bike</option>
+                <option value="truck">Truck</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" type="button" (click)="closeParkModal()">Cancel</button>
+          <button class="btn btn-primary" type="submit" [disabled]="!parkForm.valid">Confirm Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showCheckoutModal" (click)="closeCheckoutModal()">
+    <div class="modal-window" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Manual Exit</h3>
+      </div>
+      <form (ngSubmit)="exitVehicleByVehicleNumber()" #exitForm="ngForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Vehicle Number</label>
+            <input type="text" [(ngModel)]="exitData.vehicleNumber" name="vehicleNumber" placeholder="Enter vehicle number" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" type="button" (click)="closeCheckoutModal()">Cancel</button>
+          <button class="btn btn-primary" type="submit" [disabled]="!exitForm.valid">Process Exit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showQrModal" (click)="closeQrModal()">
+    <div class="modal-window" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Entry Successful</h3>
+        <button class="icon-close" (click)="closeQrModal()">&times;</button>
+      </div>
+      <div class="modal-body centered">
+        <app-qr-generator [vehicleNumber]="lastParkedVehicle"></app-qr-generator>
+        <p class="helper-text">Scan at exit gate to process payment.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showScannerModal" (click)="closeScannerModal()">
+    <div class="modal-window large" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Scan Gate QR</h3>
+        <button class="icon-close" (click)="closeScannerModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <app-qr-scanner (vehicleFound)="onVehicleScanned($event)"></app-qr-scanner>
+      </div>
+    </div>
+  </div>
+
+</div>

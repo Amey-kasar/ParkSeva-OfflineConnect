@@ -1,0 +1,108 @@
+<div class="safety-console">
+  <!-- Incident Alert Banner -->
+  <div class="incident-banner" *ngIf="currentIncident && currentIncident.status === 'PENDING'" [ngClass]="getIncidentBannerClass()">
+    <div class="banner-content">
+      <span class="banner-icon">⚠</span>
+      <div class="banner-info">
+        <strong>INCIDENT DETECTED</strong>
+        <span>{{ currentIncident.type }} - {{ currentIncident.location }}</span>
+      </div>
+      <div class="banner-timer" *ngIf="countdown > 0">
+        <span class="timer-label">Auto-escalate in:</span>
+        <span class="timer-value">{{ countdown }}s</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="console-header">
+    <h1>Safety Console</h1>
+    <div class="status-indicator" [ngClass]="getStatusClass()">
+      <span class="status-dot"></span>
+      <span class="status-text">{{ incidentStatus.status }}</span>
+    </div>
+  </div>
+
+  <div class="console-grid">
+    <!-- Live Camera Feed -->
+    <div class="camera-section card">
+      <h2>Live Camera Feed</h2>
+      <div class="camera-feed">
+        <img 
+          [src]="cameraFeedUrl" 
+          alt="Live Camera Feed" 
+          class="feed-image"
+          (error)="onFeedError()"
+          *ngIf="!feedError" />
+        <div class="feed-error" *ngIf="feedError">
+          <p>Unable to load camera feed</p>
+          <p class="error-detail">Make sure Python backend is running on http://localhost:5055</p>
+          <button class="btn-retry" (click)="retryFeed()">Retry</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Incident Controls -->
+    <div class="controls-section card">
+      <h2>Incident Controls</h2>
+      
+      <div class="incident-status-card" *ngIf="currentIncident" [ngClass]="getIncidentStatusClass()">
+        <div class="status-header">
+          <span class="status-badge">{{ currentIncident.status }}</span>
+          <span class="incident-type">{{ currentIncident.type }}</span>
+        </div>
+        <div class="incident-details">
+          <p><strong>Location:</strong> {{ currentIncident.location }}</p>
+          <p><strong>Time:</strong> {{ currentIncident.timestamp | date:'short' }}</p>
+          <p *ngIf="currentIncident.description"><strong>Details:</strong> {{ currentIncident.description }}</p>
+        </div>
+      </div>
+
+      <div class="control-buttons" *ngIf="currentIncident && currentIncident.status === 'PENDING'">
+        <button 
+          class="btn btn-success" 
+          (click)="acknowledgeCurrentIncident()"
+          [disabled]="actionTaken">
+          <span>✓ Acknowledge Incident</span>
+        </button>
+
+        <button 
+          class="btn btn-warning" 
+          (click)="markCurrentFalseAlarm()"
+          [disabled]="actionTaken">
+          ✕ Mark False Alarm
+        </button>
+
+        <button 
+          class="btn btn-danger" 
+          (click)="escalateCurrentIncident()"
+          [disabled]="actionTaken">
+          ⚠ Escalate Now
+        </button>
+      </div>
+
+      <div class="normal-status" *ngIf="!currentIncident">
+        <p>✓ All systems normal. No incidents detected.</p>
+      </div>
+
+      <div class="action-taken-msg" *ngIf="actionTaken && currentIncident">
+        <p>✓ Action taken: {{ currentIncident.status }}</p>
+      </div>
+    </div>
+
+    <!-- Evidence Gallery -->
+    <div class="evidence-section card">
+      <h2>Evidence Gallery</h2>
+      <div class="evidence-grid" *ngIf="evidenceList.length > 0">
+        <div class="evidence-item" *ngFor="let evidence of evidenceList">
+          <img [src]="evidence.url" [alt]="evidence.filename" />
+          <div class="evidence-info">
+            <span class="evidence-time">{{ evidence.timestamp | date:'short' }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="no-evidence" *ngIf="evidenceList.length === 0">
+        <p>No evidence files available</p>
+      </div>
+    </div>
+  </div>
+</div>

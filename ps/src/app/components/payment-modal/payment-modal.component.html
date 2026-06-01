@@ -1,0 +1,88 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-window" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h3>Payment Required</h3>
+      <button class="icon-close" (click)="closeModal()">×</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="details-card">
+        <div class="detail-row">
+          <span class="label">Vehicle No.</span>
+          <span class="value font-mono">{{paymentData.vehicleNumber}}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Duration</span>
+          <span class="value">{{paymentData.totalHours}} hours</span>
+        </div>
+        <div class="divider"></div>
+        <div class="detail-row total">
+          <span class="label">Total Amount</span>
+          <span class="value amount">₹{{paymentData.totalAmount}}</span>
+        </div>
+      </div>
+
+      <div class="payment-methods">
+        <label class="section-label">Select Method</label>
+        <div class="method-grid">
+          <button 
+            class="method-card" 
+            [class.active]="selectedMethod === 'cash'"
+            (click)="selectMethod('cash')">
+            <i class="fa-solid fa-money-bill-wave"></i>
+            <span>Cash</span>
+          </button>
+          
+          <button 
+            class="method-card" 
+            [class.active]="selectedMethod === 'razorpay'"
+            (click)="selectMethod('razorpay')">
+            <i class="fa-solid fa-credit-card"></i>
+            <span>Razorpay</span>
+          </button>
+
+          <button
+            class="method-card"
+            [class.active]="selectedMethod === 'wallet'"
+            (click)="selectMethod('wallet')">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Wallet</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="info-box" *ngIf="selectedMethod === 'razorpay'">
+        <i class="fa-solid fa-lock"></i>
+        <p>Redirecting to secure gateway...</p>
+      </div>
+
+      <div class="info-box" *ngIf="selectedMethod === 'wallet'">
+        <i class="fa-solid fa-wallet"></i>
+        <p *ngIf="walletLoading">Loading wallet balance...</p>
+        <p *ngIf="!walletLoading">Wallet Balance: ₹{{walletBalance ?? 0}}</p>
+        <div class="wallet-topup">
+          <input
+            type="number"
+            min="1"
+            [(ngModel)]="walletTopupAmount"
+            placeholder="Add amount">
+          <button class="btn btn-outline" type="button" (click)="addWalletFunds()" [disabled]="walletLoading">
+            Add Funds
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline" (click)="closeModal()">Cancel</button>
+      <button 
+        class="btn btn-primary" 
+        (click)="processPayment()"
+        [disabled]="!selectedMethod">
+        Complete Payment
+      </button>
+    </div>
+
+  </div>
+</div>

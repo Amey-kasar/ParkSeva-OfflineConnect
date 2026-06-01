@@ -1,0 +1,81 @@
+<div class="parking-shell">
+  
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Find Locations</h1>
+      <p>Discover nearby parking spaces and navigate.</p>
+    </div>
+  </div>
+
+  <div class="finder-layout">
+    
+    <div class="sidebar-panel">
+      
+      <div class="search-wrapper">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="onSearch()"
+          placeholder="Search location or address..."
+          class="search-input">
+      </div>
+
+      <div class="state-message" *ngIf="isLoading">
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+        <p>Locating spaces...</p>
+      </div>
+
+      <div class="state-message" *ngIf="!isLoading && filteredLocations.length === 0">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <p>No locations found.</p>
+      </div>
+
+      <div class="locations-list" *ngIf="!isLoading && filteredLocations.length > 0">
+        <div class="location-card" *ngFor="let location of filteredLocations">
+          
+          <div class="card-header">
+            <h3>{{ location.locationName }}</h3>
+            <span class="distance-badge" *ngIf="location.distance">
+              {{ location.distance | number:'1.1-1' }} km
+            </span>
+          </div>
+
+          <p class="address-text">
+            <i class="fa-solid fa-location-dot"></i> {{ location.address }}
+          </p>
+
+          <div class="meta-grid">
+            <div class="meta-item">
+              <span class="label">Slots</span>
+              <span class="value">{{ location.totalSlots }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="label">Hours</span>
+              <span class="value">{{ location.operatingHours.open }} - {{ location.operatingHours.close }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="label">Contact</span>
+              <span class="value">{{ location.contactInfo.phone }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-primary" (click)="getDirections(location)">
+              <i class="fa-solid fa-diamond-turn-right"></i> Directions
+            </button>
+            <button class="btn btn-outline" (click)="openInMaps(location)">
+              <i class="fa-solid fa-map"></i> View Map
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="map-panel">
+      <div id="map" class="map-container"></div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,243 @@
+/* Import Plus Jakarta Sans */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:host {
+  --bg-body: #ffffff;
+  --bg-subtle: #f9fafb;
+  --text-main: #09090b;  /* Near Black */
+  --text-muted: #71717a; /* Medium Gray */
+  --border: #e4e4e7;
+  --border-focus: #09090b;
+  --font-main: 'Plus Jakarta Sans', sans-serif;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-subtle); /* Clean gray background */
+  font-family: var(--font-main);
+  padding: 2rem;
+}
+
+.login-card {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  height: 600px;
+  background: #fff;
+  border: 1px solid var(--border); /* Flat border instead of shadow */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02); /* Very subtle shadow */
+}
+
+/* --- Left: Form Section --- */
+.form-section {
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  margin-bottom: 3rem;
+}
+
+.form-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 360px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.text-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.text-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 4px; /* Squared off */
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+  font-family: var(--font-main);
+  color: var(--text-main);
+  transition: all 0.2s;
+  background: #fff;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--border-focus); /* Black border on focus */
+  background: var(--bg-subtle);
+}
+
+.form-group input::placeholder {
+  color: #a1a1aa;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 0.85rem;
+  margin-top: 1rem;
+  background: var(--text-main); /* Black */
+  border: 1px solid var(--text-main);
+  border-radius: 4px;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-login:hover:not(:disabled) {
+  background: #27272a; /* Dark gray */
+  transform: translateY(-1px);
+}
+
+.btn-login:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.footer-links {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer-links a {
+  color: var(--text-main);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.footer-links a:hover {
+  border-color: var(--text-main);
+}
+
+.legal-footer {
+  margin-top: auto;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+}
+
+/* --- Right: Visual Section --- */
+.visual-section {
+  flex: 1.2; /* Slightly wider */
+  position: relative;
+  overflow: hidden;
+  background: #000;
+}
+
+.slides-container, .slide {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.slide {
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* THEME KEY: Grayscale filter makes stock photos look enterprise */
+  filter: grayscale(100%) contrast(1.1); 
+}
+
+.slide-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* Slight dimming */
+}
+
+/* Dots */
+.indicators {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.dot.active {
+  background: #fff;
+  transform: scale(1.2);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .login-card {
+    flex-direction: column;
+    height: auto;
+    max-width: 450px;
+  }
+  
+  .visual-section {
+    display: none; /* Hide slider on mobile for cleaner look */
+  }
+  
+  .form-section {
+    padding: 2rem;
+  }
+}

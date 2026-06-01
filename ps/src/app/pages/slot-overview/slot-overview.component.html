@@ -1,0 +1,132 @@
+<!-- Top Bar -->
+<div class="top-bar">
+  <h3>&nbsp;Slot Overview</h3>
+
+</div>
+<!-- Vehicle Type Sections -->
+<div class="vehicle-sections">
+  <div class="vehicle-section">
+    <h4 class="vehicle-title">Bike Slots</h4>
+    <div class="slots-preview">
+      <div
+        class="preview-item"
+        *ngFor="let slot of getSlotsByType('bike')"
+        [ngClass]="slot.status"
+        (click)="selectSlot(slot)"
+      >
+        {{ convertForDisplay(slot) }}
+      </div>
+    </div>
+  </div>
+
+  <div class="vehicle-section">
+    <h4 class="vehicle-title">Car Slots</h4>
+    <div class="slots-preview">
+      <div
+        class="preview-item"
+        *ngFor="let slot of getSlotsByType('car')"
+        [ngClass]="slot.status"
+        (click)="selectSlot(slot)"
+      >
+        {{ convertForDisplay(slot) }}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="vehicle-section">
+    <h4 class="vehicle-title">Truck Slots</h4>
+    <div class="slots-preview">
+      <div
+        class="preview-item"
+        *ngFor="let slot of getSlotsByType('truck')"
+        [ngClass]="slot.status"
+        (click)="selectSlot(slot)"
+      >
+        {{ convertForDisplay(slot) }}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="slots-table">
+    <!-- Header with title + filter buttons -->
+<div class="directory-header">
+  <h2>Slot Directory</h2>
+
+  <div class="directory-filters">
+    <button class="filter-btn" [class.active]="filterType === ''" (click)="setFilterType('')">All</button>
+    <button class="filter-btn" [class.active]="filterType === 'bike'" (click)="setFilterType('bike')">Bikes</button>
+    <button class="filter-btn" [class.active]="filterType === 'car'" (click)="setFilterType('car')">Cars</button>
+    <button class="filter-btn" [class.active]="filterType === 'truck'" (click)="setFilterType('truck')">Trucks</button>
+  </div>
+</div>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Slot Number</th>
+        <th>Vehicle Type</th>
+        <th>Hourly Rate</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let slot of getDirectorySlots()">
+        <td>{{ convertForDisplay(slot) }}</td>
+        <td>{{ slot.vehicleType }}</td>
+        <td>₹{{ slot.hourlyRate }}</td>
+        <td>
+          <span class="status-badge" [ngClass]="slot.status">{{ slot.status }}</span>
+        </td>
+        <td>
+          <button class="btn-delete" (click)="deleteSlot(slot._id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+<!-- Add Slot Modal -->
+<div class="modal" *ngIf="showAddModal" (click)="closeAddModal()">
+<div class="modal-content" (click)="$event.stopPropagation()">
+  <h3>Add New Parking Slot</h3>
+  <form (ngSubmit)="addSlot()" #slotForm="ngForm">
+    <div class="form-group">
+      <label>Vehicle Type</label>
+      <select [(ngModel)]="newSlot.vehicleType" name="vehicleType" required>
+        <option value="bike">Bike</option>
+        <option value="car">Car</option>
+        <option value="truck">Truck</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Slot Number</label>
+      <input type="text" [(ngModel)]="newSlot.slotNumber" name="slotNumber" required />
+    </div>
+    <div class="form-group">
+      <label>Hourly Rate</label>
+      <input type="number" [(ngModel)]="newSlot.hourlyRate" name="hourlyRate" required />
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select [(ngModel)]="newSlot.status" name="status" required>
+        <option value="available">Available</option>
+        <option value="occupied">Occupied</option>
+        <option value="maintenance">Maintenance</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" type="submit" [disabled]="!slotForm.valid"><b>Add Slot</b></button>
+      <button class="btn-secondary" type="button" (click)="closeAddModal()"><b>Cancel</b></button>
+    </div>
+  </form>
+</div>
+</div>
+
+

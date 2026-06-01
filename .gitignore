@@ -1,0 +1,59 @@
+# Angular / Node.js
+node_modules/
+dist/
+.angular/
+coverage/
+.cache/
+.vite/
+17.3.17/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment Variables
+.env
+*.env
+
+# AI Models
+*.pt
+*.pth
+*.onnx
+
+# Datasets
+falling_datase-1/
+dataset/
+datasets/
+
+# Generated Evidence
+evidence/
+runs/
+output/
+outputs/
+
+# IDE
+.vscode/
+.idea/
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Images generated during testing
+*.jpg
+
+# Cache
+pytest_cache/
+.mypy_cache/
